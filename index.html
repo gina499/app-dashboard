@@ -7,7 +7,7 @@
     <script type="module" crossorigin src="./assets/index-BZsJNk28.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Bl0E6WHI.css">
     <style>
-      /* ===== Sidebar – Lokale Apps ===== */
+      /* ===== Sidebar – Lokale Apps (schwebend, kein Hintergrund) ===== */
       #app-sidebar {
         position: fixed;
         left: 0;
@@ -18,17 +18,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 12px 0 10px;
-        gap: 2px;
-        background: rgba(248,250,252,0.5);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-right: 1px solid rgba(148,163,184,0.15);
-        transition: background 0.3s, border-color 0.3s;
+        justify-content: center;
+        gap: 4px;
+        background: transparent;
+        border: none;
       }
       .dark #app-sidebar {
-        background: rgba(0,0,0,0.6);
-        border-right: 1px solid rgba(255,255,255,0.08);
+        background: transparent;
+        border: none;
       }
 
       #app-sidebar .app-btn {
@@ -36,40 +33,40 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
         text-decoration: none;
-        color: #475569;
+        color: #94a3b8;
         transition: all 0.2s ease;
-        gap: 3px;
+        gap: 2px;
         cursor: pointer;
         border: none;
         background: transparent;
         position: relative;
       }
       #app-sidebar .app-btn:hover {
-        background: rgba(99,102,241,0.1);
-        color: #4f46e5;
+        background: rgba(99,102,241,0.08);
+        color: #6366f1;
       }
       #app-sidebar .app-btn:active {
-        transform: scale(0.94);
+        transform: scale(0.92);
       }
       .dark #app-sidebar .app-btn {
-        color: rgba(226,232,240,0.7);
+        color: rgba(148,163,184,0.5);
       }
       .dark #app-sidebar .app-btn:hover {
-        background: rgba(129,140,248,0.15);
+        background: rgba(129,140,248,0.12);
         color: #a5b4fc;
       }
 
       #app-sidebar .app-btn svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         flex-shrink: 0;
       }
       #app-sidebar .app-btn .app-label {
-        font-size: 7px;
+        font-size: 6px;
         font-weight: 600;
         line-height: 1;
         letter-spacing: 0.02em;
@@ -77,30 +74,26 @@
       }
 
       #app-sidebar .sidebar-divider {
-        width: 28px;
+        width: 20px;
         height: 1px;
-        background: rgba(148,163,184,0.15);
+        background: rgba(148,163,184,0.12);
         margin: 6px 0;
       }
       .dark #app-sidebar .sidebar-divider {
-        background: rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.06);
       }
 
       #app-sidebar .sidebar-note {
         font-size: 6px;
-        color: rgba(100,116,139,0.3);
-        margin-top: auto;
+        color: rgba(100,116,139,0.25);
         letter-spacing: 0.5px;
         font-weight: 600;
       }
       .dark #app-sidebar .sidebar-note {
-        color: rgba(148,163,184,0.2);
+        color: rgba(148,163,184,0.15);
       }
 
-      /* Platz für die Sidebar */
-      body {
-        padding-left: 68px;
-      }
+      /* Kein Padding nötig – Sidebar ist transparent und schwebt frei */
 
       /* LaunchPad Pro Titel größer */
       h1.text-xl {
