@@ -165,7 +165,10 @@
 
       // ===== Footer & Titel nach dem React-Rendering anpassen =====
       (function fixDashboard() {
+        var applied = false;
         function apply() {
+          if (applied) return;
+          applied = true;
           // Footer-Text: LaunchPadPro, ohne "Offener Quellcode"
           var paras = document.querySelectorAll('footer p');
           paras.forEach(function(p) {
@@ -175,23 +178,23 @@
           });
 
           // Rocket-Enterprise-Zeile entfernen
-          var spans = document.querySelectorAll('footer span, footer div');
-          spans.forEach(function(el) {
+          var rocketEls = document.querySelectorAll('footer span');
+          rocketEls.forEach(function(el) {
             if (el.textContent.includes('Enterprise Cluster') || el.textContent.includes('🚀')) {
               if (el.parentNode) el.parentNode.removeChild(el);
             }
           });
 
           // Trennpunkt "•" zwischen Rocket und Defaults entfernen
-          var separators = document.querySelectorAll('footer');
-          separators.forEach(function(f) {
-            var all = f.querySelectorAll('span');
-            all.forEach(function(s) {
-              if (s.textContent.trim() === '•' || s.textContent.trim() === '·') {
-                // Prüfen ob es wirklich der Trennstrich ist (der Rocket-Teil ist schon weg)
+          var dots = document.querySelectorAll('footer span');
+          dots.forEach(function(s) {
+            if (s.textContent.trim() === '•' || s.textContent.trim() === '·') {
+              // Nach der Rocket-Entfernung prüfen, ob der Dot allein im Container ist
+              if (s.parentNode && s.parentNode.querySelectorAll('span').length <= 1) {
+                // Rocket ist weg, Dot auch entfernen
                 if (s.parentNode) s.parentNode.removeChild(s);
               }
-            });
+            }
           });
         }
 
@@ -199,8 +202,8 @@
         var tries = 0;
         function waitAndApply() {
           tries++;
-          var footer = document.querySelector('footer');
-          if (footer && tries < 50) {
+          var footerP = document.querySelector('footer p');
+          if (footerP && footerP.textContent.includes('Launch') && tries < 50) {
             apply();
           } else if (tries < 50) {
             setTimeout(waitAndApply, 100);
