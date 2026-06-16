@@ -6,9 +6,172 @@
     <title>App & Tool Dashboard</title>
     <script type="module" crossorigin src="./assets/index-BZsJNk28.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Bl0E6WHI.css">
+    <style>
+      /* ===== Sidebar – Lokale Apps ===== */
+      #app-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 68px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px 0 12px;
+        gap: 2px;
+        background: rgba(248,250,252,0.35);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-right: 1px solid rgba(148,163,184,0.12);
+        transition: background 0.3s, border-color 0.3s;
+      }
+      .dark #app-sidebar {
+        background: rgba(2,6,23,0.35);
+        border-right: 1px solid rgba(255,255,255,0.06);
+      }
+
+      #app-sidebar .sidebar-heading {
+        font-size: 7px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: rgba(100,116,139,0.45);
+        margin-bottom: 10px;
+        margin-top: 2px;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+      }
+      .dark #app-sidebar .sidebar-heading {
+        color: rgba(148,163,184,0.3);
+      }
+
+      #app-sidebar .app-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        text-decoration: none;
+        color: #64748b;
+        transition: all 0.2s ease;
+        gap: 3px;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        position: relative;
+      }
+      #app-sidebar .app-btn:hover {
+        background: rgba(99,102,241,0.08);
+        color: #6366f1;
+      }
+      #app-sidebar .app-btn:active {
+        transform: scale(0.94);
+      }
+      .dark #app-sidebar .app-btn {
+        color: rgba(148,163,184,0.55);
+      }
+      .dark #app-sidebar .app-btn:hover {
+        background: rgba(129,140,248,0.12);
+        color: #818cf8;
+      }
+
+      #app-sidebar .app-btn svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+      #app-sidebar .app-btn .app-label {
+        font-size: 7px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      #app-sidebar .sidebar-divider {
+        width: 28px;
+        height: 1px;
+        background: rgba(148,163,184,0.15);
+        margin: 6px 0;
+      }
+      .dark #app-sidebar .sidebar-divider {
+        background: rgba(255,255,255,0.06);
+      }
+
+      /* Platz für die Sidebar – Hauptinhalt nach rechts rücken */
+      body {
+        padding-left: 68px;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Sidebar wird per JS gebaut -->
+    <div id="app-sidebar"></div>
+
+    <script>
+      (function() {
+        var apps = [
+          {
+            label: 'Obsidian',
+            url: 'obsidian://open',
+            // Quill / book icon
+            svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M16 8.2C16 7 15 6 13.8 6h-.4c-1.2 0-2.4.6-3 1.6l-.6 1c-.6 1-.6 2.2 0 3.2l.6 1c.6 1 1.8 1.6 3 1.6h.4c1.2 0 2.4-.6 3-1.6l.6-1c.6-1 .6-2.2 0-3.2Z"/></svg>'
+          },
+          {
+            label: 'VS Code',
+            url: 'vscode://',
+            // Code brackets icon
+            svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
+          },
+          {
+            label: 'OpenCode',
+            url: 'opencode://',
+            // Terminal icon
+            svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>'
+          },
+          {
+            label: 'Stirling PDF',
+            url: 'stirlingpdf://',
+            // File-text icon
+            svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+          }
+        ];
+
+        var sidebar = document.getElementById('app-sidebar');
+        if (!sidebar) return;
+
+        // Heading
+        var heading = document.createElement('div');
+        heading.className = 'sidebar-heading';
+        heading.textContent = 'Apps';
+        sidebar.appendChild(heading);
+
+        // App buttons
+        apps.forEach(function(app) {
+          var btn = document.createElement('a');
+          btn.className = 'app-btn';
+          btn.href = app.url;
+          btn.title = app.label;
+          btn.innerHTML = app.svg + '<span class="app-label">' + app.label + '</span>';
+          sidebar.appendChild(btn);
+        });
+
+        // Divider + Hinweis
+        var divider = document.createElement('div');
+        divider.className = 'sidebar-divider';
+        sidebar.appendChild(divider);
+
+        // Kleiner "Lokal"-Hinweis
+        var note = document.createElement('div');
+        note.style.cssText = 'font-size:6px;color:rgba(100,116,139,0.3);margin-top:auto;letter-spacing:0.5px;font-weight:600;';
+        note.textContent = 'LOKAL';
+        sidebar.appendChild(note);
+      })();
+    </script>
   </body>
 </html>
-
