@@ -18,32 +18,17 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 16px 0 12px;
+        padding: 12px 0 10px;
         gap: 2px;
-        background: rgba(248,250,252,0.35);
+        background: rgba(248,250,252,0.5);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border-right: 1px solid rgba(148,163,184,0.12);
+        border-right: 1px solid rgba(148,163,184,0.15);
         transition: background 0.3s, border-color 0.3s;
       }
       .dark #app-sidebar {
-        background: rgba(2,6,23,0.35);
-        border-right: 1px solid rgba(255,255,255,0.06);
-      }
-
-      #app-sidebar .sidebar-heading {
-        font-size: 7px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: rgba(100,116,139,0.45);
-        margin-bottom: 10px;
-        margin-top: 2px;
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
-      }
-      .dark #app-sidebar .sidebar-heading {
-        color: rgba(148,163,184,0.3);
+        background: rgba(15,23,42,0.45);
+        border-right: 1px solid rgba(255,255,255,0.08);
       }
 
       #app-sidebar .app-btn {
@@ -55,7 +40,7 @@
         height: 48px;
         border-radius: 14px;
         text-decoration: none;
-        color: #64748b;
+        color: #475569;
         transition: all 0.2s ease;
         gap: 3px;
         cursor: pointer;
@@ -64,18 +49,18 @@
         position: relative;
       }
       #app-sidebar .app-btn:hover {
-        background: rgba(99,102,241,0.08);
-        color: #6366f1;
+        background: rgba(99,102,241,0.1);
+        color: #4f46e5;
       }
       #app-sidebar .app-btn:active {
         transform: scale(0.94);
       }
       .dark #app-sidebar .app-btn {
-        color: rgba(148,163,184,0.55);
+        color: rgba(226,232,240,0.7);
       }
       .dark #app-sidebar .app-btn:hover {
-        background: rgba(129,140,248,0.12);
-        color: #818cf8;
+        background: rgba(129,140,248,0.15);
+        color: #a5b4fc;
       }
 
       #app-sidebar .app-btn svg {
@@ -98,19 +83,34 @@
         margin: 6px 0;
       }
       .dark #app-sidebar .sidebar-divider {
-        background: rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.08);
       }
 
-      /* Platz für die Sidebar – Hauptinhalt nach rechts rücken */
+      #app-sidebar .sidebar-note {
+        font-size: 6px;
+        color: rgba(100,116,139,0.3);
+        margin-top: auto;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+      }
+      .dark #app-sidebar .sidebar-note {
+        color: rgba(148,163,184,0.2);
+      }
+
+      /* Platz für die Sidebar */
       body {
         padding-left: 68px;
+      }
+
+      /* LaunchPad Pro Titel größer */
+      h1.text-xl {
+        font-size: 1.75rem !important;
       }
     </style>
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- Sidebar wird per JS gebaut -->
     <div id="app-sidebar"></div>
 
     <script>
@@ -119,25 +119,21 @@
           {
             label: 'Obsidian',
             url: 'obsidian://open',
-            // Quill / book icon
             svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M16 8.2C16 7 15 6 13.8 6h-.4c-1.2 0-2.4.6-3 1.6l-.6 1c-.6 1-.6 2.2 0 3.2l.6 1c.6 1 1.8 1.6 3 1.6h.4c1.2 0 2.4-.6 3-1.6l.6-1c.6-1 .6-2.2 0-3.2Z"/></svg>'
           },
           {
             label: 'VS Code',
             url: 'vscode://',
-            // Code brackets icon
             svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
           },
           {
             label: 'OpenCode',
             url: 'opencode://',
-            // Terminal icon
             svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>'
           },
           {
-            label: 'Stirling PDF',
+            label: 'Stirling',
             url: 'stirlingpdf://',
-            // File-text icon
             svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
           }
         ];
@@ -145,13 +141,7 @@
         var sidebar = document.getElementById('app-sidebar');
         if (!sidebar) return;
 
-        // Heading
-        var heading = document.createElement('div');
-        heading.className = 'sidebar-heading';
-        heading.textContent = 'Apps';
-        sidebar.appendChild(heading);
-
-        // App buttons
+        // App-Buttons (ohne Heading)
         apps.forEach(function(app) {
           var btn = document.createElement('a');
           btn.className = 'app-btn';
@@ -161,16 +151,62 @@
           sidebar.appendChild(btn);
         });
 
-        // Divider + Hinweis
+        // Divider
         var divider = document.createElement('div');
         divider.className = 'sidebar-divider';
         sidebar.appendChild(divider);
 
-        // Kleiner "Lokal"-Hinweis
+        // "LOKAL"-Hinweis
         var note = document.createElement('div');
-        note.style.cssText = 'font-size:6px;color:rgba(100,116,139,0.3);margin-top:auto;letter-spacing:0.5px;font-weight:600;';
+        note.className = 'sidebar-note';
         note.textContent = 'LOKAL';
         sidebar.appendChild(note);
+      })();
+
+      // ===== Footer & Titel nach dem React-Rendering anpassen =====
+      (function fixDashboard() {
+        function apply() {
+          // Footer-Text: LaunchPadPro, ohne "Offener Quellcode"
+          var paras = document.querySelectorAll('footer p');
+          paras.forEach(function(p) {
+            if (p.textContent.includes('Launchpad') || p.textContent.includes('LaunchPad')) {
+              p.textContent = '© ' + new Date().getFullYear() + ' LaunchPadPro · Made with ❤';
+            }
+          });
+
+          // Rocket-Enterprise-Zeile entfernen
+          var spans = document.querySelectorAll('footer span, footer div');
+          spans.forEach(function(el) {
+            if (el.textContent.includes('Enterprise Cluster') || el.textContent.includes('🚀')) {
+              if (el.parentNode) el.parentNode.removeChild(el);
+            }
+          });
+
+          // Trennpunkt "•" zwischen Rocket und Defaults entfernen
+          var separators = document.querySelectorAll('footer');
+          separators.forEach(function(f) {
+            var all = f.querySelectorAll('span');
+            all.forEach(function(s) {
+              if (s.textContent.trim() === '•' || s.textContent.trim() === '·') {
+                // Prüfen ob es wirklich der Trennstrich ist (der Rocket-Teil ist schon weg)
+                if (s.parentNode) s.parentNode.removeChild(s);
+              }
+            });
+          });
+        }
+
+        // Warten bis React gerendert hat (max 5 Sekunden)
+        var tries = 0;
+        function waitAndApply() {
+          tries++;
+          var footer = document.querySelector('footer');
+          if (footer && tries < 50) {
+            apply();
+          } else if (tries < 50) {
+            setTimeout(waitAndApply, 100);
+          }
+        }
+        waitAndApply();
       })();
     </script>
   </body>
