@@ -43,11 +43,17 @@
           var dots = document.querySelectorAll('footer span');
           dots.forEach(function(s) {
             if (s.textContent.trim() === '•' || s.textContent.trim() === '·') {
-              // Nach der Rocket-Entfernung prüfen, ob der Dot allein im Container ist
               if (s.parentNode && s.parentNode.querySelectorAll('span').length <= 1) {
-                // Rocket ist weg, Dot auch entfernen
                 if (s.parentNode) s.parentNode.removeChild(s);
               }
+            }
+          });
+
+          // "Defaults laden"-Button entfernen
+          var allSpans = document.querySelectorAll('footer span, footer a, footer button');
+          allSpans.forEach(function(el) {
+            if (el.textContent.includes('Defaults')) {
+              if (el.parentNode) el.parentNode.removeChild(el);
             }
           });
         }
